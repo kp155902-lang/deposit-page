@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      max-width: 500px;
+      margin: auto;
+    }
+    .amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: green;
+    }
+    .received {
+      font-size: 14px;
+      color: #4caf50;
+      margin-left: 8px;
+    }
+    .info {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+    .copy-btn {
+      font-size: 12px;
+      color: #007bff;
+      cursor: pointer;
+      margin-left: 8px;
+      text-decoration: underline;
+    }
+    .explorer-link {
+      display: block;
+      margin-top: 12px;
+      text-align: center;
+      background: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+    }
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #43a047;
+    }
+
+    /* Toast Notification */
+    .toast {
+      visibility: hidden;
+      min-width: 200px;
+      margin-left: -100px;
+      background: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      font-size: 14px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s, bottom 0.5s;
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+      bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Deposit Display -->
+  <div class="card">
+    <h2>Deposit details</h2>
+    <p class="amount" id="amount">+1171 USDT <span class="received">? Received</span></p>
+    <p class="info"><b>Blockchain:</b> <span id="blockchain">TRC20</span></p>
+    <p class="info"><b>Type:</b> <span id="type">Deposit</span></p>
+    <p class="info"><b>Status:</b> <span id="status">Received</span></p>
+    <p class="info">
+      <b>Deposit address:</b> 
+      <span id="depositAddress">TNxxxxxxx</span>
+      <span class="copy-btn" onclick="copyText('depositAddress')">Copy</span>
+    </p>
+    <p class="info">
+      <b>Transaction ID:</b> 
+      <span id="txid">s1tz2q7...ir8r</span>
+      <span class="copy-btn" onclick="copyText('txid')">Copy</span>
+    </p>
+    <p class="info"><b>Time:</b> <span id="time">2025-09-03 01:00:00</span></p>
+
+    <!-- Explorer link -->
+    <a id="explorerLink" href="#" target="_blank" class="explorer-link">View on blockchain explorer</a>
+  </div>
+
+  <!-- Update Form -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Update Deposit</h3>
+    
+    <label>Amount (USDT)</label>
+    <input type="text" id="amountInput" placeholder="1171">
+    
+    <label>Blockchain</label>
+    <input type="text" id="blockchainInput" placeholder="TRC20">
+    
+    <label>Type</label>
+    <input type="text" id="typeInput" placeholder="Deposit">
+    
+    <label>Status</label>
+    <input type="text" id="statusInput" placeholder="Received">
+    
+    <label>Deposit Address</label>
+    <input type="text" id="addressInput" placeholder="TNxxxxxxx">
+    
+    <label>Transaction ID</label>
+    <input type="text" id="txidInput" placeholder="s1tz2q7...ir8r">
+    
+    <label>Time</label>
+    <input type="text" id="timeInput" placeholder="YYYY-MM-DD HH:mm:ss">
+    
+    <button onclick="updateDeposit()">Update</button>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">Copied!</div>
+
+  <script>
+    function copyText(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Copied: " + text);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.className = "toast show";
+      setTimeout(() => {
+        toast.className = toast.className.replace("show", "");
+      }, 2500);
+    }
+
+    function updateDeposit() {
+      const amount = document.getElementById("amountInput").value || "1171";
+      const blockchain = document.getElementById("blockchainInput").value || "TRC20";
+      const type = document.getElementById("typeInput").value || "Deposit";
+      const status = document.getElementById("statusInput").value || "Received";
+      const address = document.getElementById("addressInput").value || "TNxxxxxxx";
+      const txid = document.getElementById("txidInput").value || "s1tz2q7...ir8r";
+      const time = document.getElementById("timeInput").value || new Date().toLocaleString();
+
+      document.getElementById("amount").innerHTML = `+${amount} USDT <span class="received">? ${status}</span>`;
+      document.getElementById("blockchain").textContent = blockchain;
+      document.getElementById("type").textContent = type;
+      document.getElementById("status").textContent = status;
+      document.getElementById("depositAddress").textContent = address;
+      document.getElementById("txid").textContent = txid;
+      document.getElementById("time").textContent = time;
+
+      // Update explorer link
+      document.getElementById("explorerLink").href = `https://tronscan.org/#/transaction/${txid}`;
+    }
+  </script>
+</body>
+</html>
